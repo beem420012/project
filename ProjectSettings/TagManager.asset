@@ -7,6 +7,8 @@ TagManager:
   - Key
   - Door
   - Spike
+  - Spike1
+  - Spike2
   layers:
   - Default
   - TransparentFX
