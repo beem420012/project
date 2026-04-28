@@ -7,12 +7,16 @@ public class PlayerKeyDoor : MonoBehaviour
 
     public Transform spawnPoint2;
     public Transform spawnPoint3;
+    public Transform spawnPoint4; // 🆕
 
     public Collider2D zone2Left;
     public Collider2D zone2Right;
 
     public Collider2D zone3Left;
     public Collider2D zone3Right;
+
+    public Collider2D zone4Left;  // 🆕
+    public Collider2D zone4Right; // 🆕
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -39,16 +43,15 @@ public class PlayerKeyDoor : MonoBehaviour
                 cam.SnapToX(spawnPoint2.position.x);
             }
 
-            // 🟡 ด่าน 2 → 🔥 ต้องมีกุญแจเท่านั้น
+            // 🟡 ด่าน 2 → ต้องมีกุญแจ
             else if(currentZone == 2)
             {
                 if(!hasKey)
                 {
                     Debug.Log("🚫 ยังไม่มีกุญแจ");
-                    return; // 🔥 ไม่ไปไหนเลย
+                    return;
                 }
 
-                // ✔️ มีกุญแจ → ไปด่าน 3
                 transform.position = spawnPoint3.position;
                 currentZone = 3;
                 hasKey = false;
@@ -56,7 +59,16 @@ public class PlayerKeyDoor : MonoBehaviour
                 cam.SetBounds(zone3Left, zone3Right);
                 cam.SnapToX(spawnPoint3.position.x);
             }
-        }
 
+            // 🔴 ด่าน 3 → ไปด่าน 4
+            else if(currentZone == 3)
+            {
+                transform.position = spawnPoint4.position;
+                currentZone = 4;
+
+                cam.SetBounds(zone4Left, zone4Right);
+                cam.SnapToX(spawnPoint4.position.x);
+            }
+        }
     }
 }

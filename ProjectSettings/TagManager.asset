@@ -9,11 +9,12 @@ TagManager:
   - Spike
   - Spike1
   - Spike2
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - 
