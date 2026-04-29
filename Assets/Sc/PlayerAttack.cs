@@ -11,26 +11,20 @@ public class PlayerAttack : MonoBehaviour
     public float attackCooldown = 0.5f;
     private float lastAttackTime;
 
-    // 👉 เก็บทิศล่าสุด
     private float lastDir = 1f;
 
     void Update()
     {
         float move = Input.GetAxisRaw("Horizontal");
 
-        // 👉 ถ้ามีการกดเดิน → อัปเดตทิศ
+        // 👉 แค่เก็บทิศ ไม่ต้องไปยุ่ง scale
         if (move != 0)
         {
             lastDir = move;
-            transform.localScale = new Vector3(move, 1, 1);
         }
 
-        // 👉 กดตี
         if (Input.GetMouseButtonDown(0) && Time.time >= lastAttackTime + attackCooldown)
         {
-            // 🔄 ใช้ทิศล่าสุด แม้ไม่ได้กดตอนตี
-            transform.localScale = new Vector3(lastDir, 1, 1);
-
             Attack();
             lastAttackTime = Time.time;
         }
@@ -44,11 +38,9 @@ public class PlayerAttack : MonoBehaviour
             enemyLayer
         );
 
-        float direction = lastDir;
-
         foreach (Collider2D enemy in hits)
         {
-            enemy.GetComponentInParent<Enemy>()?.TakeDamage(damage, direction);
+            enemy.GetComponentInParent<Enemy>()?.TakeDamage(damage, lastDir);
         }
     }
 
