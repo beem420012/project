@@ -17,7 +17,6 @@ public class EnemyRanged : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        // 👉 ถ้า player อยู่ในระยะ → ยิง
         if (distance <= attackRange)
         {
             if (Time.time >= lastAttackTime + attackCooldown)
@@ -28,15 +27,13 @@ public class EnemyRanged : MonoBehaviour
         }
     }
 
-void Shoot()
-{
-    GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+    void Shoot()
+    {
+        Vector2 dir = (player.position - firePoint.position).normalized;
 
-    // 🎯 คำนวณทิศไปหา player “ตอนยิง”
-    Vector2 dir = (player.position - firePoint.position).normalized;
+        GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
 
-    bullet.GetComponent<EnemyProjectile>()?.SetDirection(dir);
-}
-
-
+        // 👇 ส่งทิศไปให้ลูกไฟ
+        bullet.GetComponent<EnemyProjectile>()?.SetDirection(dir);
+    }
 }

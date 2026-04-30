@@ -2,37 +2,22 @@ using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
 {
-    public float speed = 8f;
-    public int damage = 10;
-
+    public float speed = 10f;
     private Vector2 direction;
-
-    // 🎯 รับทิศครั้งเดียวตอนยิง
-
-    void Start()
-{
-    Destroy(gameObject, 3f); // 💨 หายหลัง 3 วินาที
-}
 
     public void SetDirection(Vector2 dir)
     {
-        direction = dir.normalized;
+        direction = dir;
+
+        // 🔥 หมุนให้ลูกไฟหันไปตามทิศ
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+// 👇 เพิ่ม offset
+transform.rotation = Quaternion.Euler(0, 0, angle + 180f);
     }
 
     void Update()
     {
-        // 👉 วิ่งตรงตลอด ไม่ตามแล้ว
-        transform.position += (Vector3)(direction * speed * Time.deltaTime);
+        transform.Translate(direction * speed * Time.deltaTime, Space.World);
     }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
-            Destroy(gameObject);
-        }
-    }
-
-    
 }
