@@ -22,6 +22,14 @@ public class EnemyAI : MonoBehaviour
     public float attackCooldown = 1f;
     float lastAttackTime;
 
+    // ✅ เก็บ scale เดิม
+    private Vector3 originalScale;
+
+    void Start()
+    {
+        originalScale = transform.localScale;
+    }
+
     void Update()
     {
         if (player == null) return;
@@ -87,12 +95,24 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    // 🔄 หันหน้า
+    // 🔄 หันหน้า (แก้แล้วไม่ให้ตัวใหญ่)
     void Flip()
     {
         if (rb.linearVelocity.x > 0)
-            transform.localScale = new Vector3(1, 1, 1);
+        {
+            transform.localScale = new Vector3(
+                Mathf.Abs(originalScale.x),
+                originalScale.y,
+                originalScale.z
+            );
+        }
         else if (rb.linearVelocity.x < 0)
-            transform.localScale = new Vector3(-1, 1, 1);
+        {
+            transform.localScale = new Vector3(
+                -Mathf.Abs(originalScale.x),
+                originalScale.y,
+                originalScale.z
+            );
+        }
     }
 }
