@@ -11,6 +11,11 @@ public class PlayerHealth : MonoBehaviour
     public float invincibleTime = 0.3f;
     private bool isInvincible = false;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip hurt;   // เสียงโดนตี
+    public AudioClip death;  // เสียงตาย (ถ้ามี)
+
     void Start()
     {
         currentHP = maxHP;
@@ -24,6 +29,13 @@ public class PlayerHealth : MonoBehaviour
         currentHP = Mathf.Clamp(currentHP, 0, maxHP);
 
         Debug.Log("Player HP: " + currentHP);
+
+        // 🔊 เล่นเสียงโดนตี
+        if (audioSource && hurt)
+        {
+            audioSource.pitch = Random.Range(0.95f, 1.05f);
+            audioSource.PlayOneShot(hurt);
+        }
 
         if (currentHP <= 0)
         {
@@ -41,23 +53,27 @@ public class PlayerHealth : MonoBehaviour
         isInvincible = false;
     }
 
-// --- ส่วนที่เพิ่มใหม่ ---
     public void Heal(int amount)
     {
         currentHP += amount;
-        
-        // ใช้ Mathf.Clamp เพื่อไม่ให้เลือดเกิน maxHP
         currentHP = Mathf.Clamp(currentHP, 0, maxHP);
 
         Debug.Log("<color=green>Player ได้รับการรักษา!</color> HP ปัจจุบัน: " + currentHP);
     }
-    
+
     void Die()
     {
         Debug.Log("Player ตาย");
-        // ตัวอย่างง่าย: ปิดตัวละคร
+
+        // 🔊 เสียงตาย (ถ้ามี)
+        if (audioSource && death)
+        {
+            audioSource.PlayOneShot(death);
+        }
+
         gameObject.SetActive(false);
-        // หรือจะรีสตาร์ทด่านก็ได้
-        SceneManager.LoadScene("Dead"); // ชื่อ Scene ต้องตรง
+
+        // โหลดฉากตาย
+        SceneManager.LoadScene("Dead");
     }
 }
